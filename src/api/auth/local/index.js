@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const config = require('../../../config');
-const passportService = require('../../../services/passport');
+const passportService = require('../../../services/passport/index');
 const Session = require('../../../models/session');
 const User = require('./models').User;
 const EmailTakenError = require('./errors').EmailTakenError;
@@ -19,10 +19,9 @@ router.post('/authenticate', passportService.authenticateLocalPassword(), functi
         var accessToken = jwt.sign({ user: user.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
         var refreshToken = jwt.sign({ user: user.serializeJwt(), session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
 
-        res.json({refresh_token: refreshToken, access_token: accessToken});
+        res.json({refreshToken: refreshToken, accessToken: accessToken});
     });
 });
-
 
 router.post('/register', function(req, res, next){
     var email = String(req.body.email).trim();

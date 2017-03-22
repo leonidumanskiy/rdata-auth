@@ -2,9 +2,9 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const config = require('../config');
-const User = require('../api/auth/local/models').User;
-const Session = require('../models/session');
+const config = require('../../config');
+const User = require('../../api/auth/local/models').User;
+const Session = require('../../models/session');
 
 var passportJWT = require("passport-jwt");
 

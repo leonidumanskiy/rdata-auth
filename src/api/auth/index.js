@@ -1,6 +1,6 @@
 const express = require('express');
 const config = require('../../config');
-const passportService = require('../../services/passport');
+const passportService = require('../../services/passport/index');
 const Session = require('../../models/session');
 
 const local = require('./local/index');
