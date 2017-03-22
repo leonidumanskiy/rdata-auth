@@ -3,7 +3,7 @@ const config = require('../../config');
 const passportService = require('../../services/passport');
 const Session = require('../../models/session');
 
-const local = require('./local');
+const local = require('./local/index');
 
 const router = new express.Router();
 

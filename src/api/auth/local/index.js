@@ -1,13 +1,15 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const config = require('../../config');
-const passportService = require('../../services/passport');
-const Session = require('../../models/session');
-const User = require('../../models/user');
+const config = require('../../../config');
+const passportService = require('../../../services/passport');
+const Session = require('../../../models/session');
+const User = require('./models').User;
+const EmailTakenError = require('./errors').EmailTakenError;
+const UsernameTakenError = require('./errors').UsernameTakenError;
 
 const router = new express.Router();
 
-router.post('/authenticate', passportService.authenticatePassword(), function(req, res, next){
+router.post('/authenticate', passportService.authenticateLocalPassword(), function(req, res, next){
     // Create new session and issue refresh and access tokens
     var user = req.user;
     Session.create({ provider: 'local', user: user.serializeJwt() }, function (err, session) {
@@ -29,8 +31,8 @@ router.post('/register', function(req, res, next){
 
     User.findOne({ $or: [{ email: email }, {username: username}] }, function(err, user){
         if(err) return next(err);
-        if(user && user.email === email) return res.json({error: { message: "This email is already taken", name: "EmailTakenError" } });
-        if(user && user.username === username) return res.json({error: {message: "This username is already taken", error: "UsernameTakenError" } });
+        if(user && user.email === email) return next(new EmailTakenError('This email is already taken'));
+        if(user && user.username === username) return next(new UsernameTakenError('This username is already taken'));
 
         User.create({ email: email, username: username, password: password }, function (err, user) {
             if(err) return next(err);

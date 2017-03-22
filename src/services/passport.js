@@ -3,7 +3,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const config = require('../config');
-const User = require('../models/user');
+const User = require('../api/auth/local/models').User;
 const Session = require('../models/session');
 
 var passportJWT = require("passport-jwt");
@@ -14,7 +14,7 @@ var JwtStrategy = passportJWT.Strategy;
 function PassportService() {
     var self = this;
 
-    this.passwordStrategy = new LocalStrategy(
+    this.localPasswordStrategy = new LocalStrategy(
         function(username, password, cb) {
             User.findOne({ $or: [{email: username}, { username: username }]}, function(err, user) {
                 if (err) return cb(err);
@@ -70,11 +70,11 @@ function PassportService() {
         next(null, user);
     });
 
-    passport.use('password', this.passwordStrategy);
+    passport.use('localPassword', this.localPasswordStrategy);
     passport.use('refreshToken', this.refreshTokenStrategy);
     passport.use('accessToken', this.accessTokenStrategy);
 
-    this.authenticatePassword = function authenticatePassword() { return passport.authenticate('password', { session: false }) };
+    this.authenticateLocalPassword = function authenticatePassword() { return passport.authenticate('localPassword', { session: false }) };
     this.authenticateRefreshToken = function authenticateRefreshToken() { return passport.authenticate('refreshToken', { session: false }) };
     this.authenticateAccessToken = function authenticateAccessToken() { return passport.authenticate('accessToken', { session: false }) };
 }
