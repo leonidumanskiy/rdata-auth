@@ -21,6 +21,7 @@ mongoose.connect(config.mongo.uri);
 app.use('/api/v1', api);
 
 // error handlers
+app.use(errorHandlers.clientErrorHandler);
 app.use(errorHandlers.validationErrorHandler);
 app.use(errorHandlers.errorHandler);
 

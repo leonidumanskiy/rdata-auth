@@ -17,7 +17,7 @@ router.post('/revoke', passportService.authenticateRefreshToken(), function(req,
 
     Session.findById(currentSessionId, function(err, session){
         if(err) return next(err);
-        if(!session) return res.json({error: "session"});
+        if(!session) return next(new Error("Session was not found"));
 
         Session.remove({_id: session.id}, function(err){
             if(err) return next(err);
@@ -26,7 +26,7 @@ router.post('/revoke', passportService.authenticateRefreshToken(), function(req,
     });
 });
 
-router.post('/test', passportService.authenticateAccessToken(), function(req, res){
+router.post('/test', passportService.authenticateAccessToken(), function(req, res, next){
     res.json({result: "ok"});
 });
 

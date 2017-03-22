@@ -29,8 +29,8 @@ router.post('/register', function(req, res, next){
 
     User.findOne({ $or: [{ email: email }, {username: username}] }, function(err, user){
         if(err) return next(err);
-        if(user && user.email === email) return res.json({message: "error", error: "email_taken"});
-        if(user && user.username === username) return res.json({message: "error", error: "username_taken"});
+        if(user && user.email === email) return res.json({error: { message: "This email is already taken", name: "EmailTakenError" } });
+        if(user && user.username === username) return res.json({error: {message: "This username is already taken", error: "UsernameTakenError" } });
 
         User.create({ email: email, username: username, password: password }, function (err, user) {
             if(err) return next(err);
