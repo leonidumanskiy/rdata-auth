@@ -26,9 +26,4 @@ router.post('/revoke', passportService.authenticateRefreshToken(), function(req,
     });
 });
 
-router.post('/test', passportService.authenticateAccessToken(), function(req, res, next){
-    res.json({result: "ok"});
-});
-
-
 module.exports = router;
