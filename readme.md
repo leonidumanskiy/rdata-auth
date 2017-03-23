@@ -43,6 +43,8 @@ Returns new registered user:
 ```
 otherwise, returns ValidationError and 400 status code.
 
+***
+
 **POST /api/v1/auth/local/authenticate**
 
 Authenticates local user
@@ -61,6 +63,8 @@ Returns refresh and access tokens.
 }
 ```
 otherwise, returns 401 Unauthorized 
+
+***
 
 ### **Strategy-agnostic API:**
 **POST /api/v1/auth/revoke**
