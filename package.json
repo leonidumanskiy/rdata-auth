@@ -1,10 +1,15 @@
 {
   "name": "rdata-auth",
   "version": "1.0.0",
-  "description": "RData Authentication Module",
+  "description": "RData Authentication Server",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rdata-systems/rdata-auth-server.git"
+  },
   "scripts": {
-    "test": "./node_modules/.bin/mocha src/**/*.test.js --reporter spec --recursive"
+    "test": "./node_modules/.bin/mocha src/**/*.test.js --reporter spec --recursive",
+    "start": "node index.js"
   },
   "author": "Leonid Umanskiy",
   "license": "MIT",

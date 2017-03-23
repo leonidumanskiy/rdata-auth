@@ -1,0 +1,21 @@
+{
+  "AWSEBDockerrunVersion": "1",
+
+  "Image": {
+    "Name": "rdata-auth-server",
+    "Update": "true"
+  },
+
+  "Ports": [
+    {
+      "ContainerPort": "9000"
+    }
+  ],
+
+  "Volumes": [
+    {
+      "HostDirectory": "/var/app/current",
+      "ContainerDirectory": "/usr/src/app"
+    }
+  ]
+}
