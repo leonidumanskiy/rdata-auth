@@ -35,7 +35,7 @@ router.post('/register', function(req, res, next){
 
         User.create({ email: email, username: username, password: password }, function (err, user) {
             if(err) return next(err);
-            res.json({user: user});
+            res.json({user: user.serializeJson()});
         });
     });
 });

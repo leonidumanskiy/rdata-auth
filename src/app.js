@@ -2,9 +2,14 @@ const http = require('http');
 const config = require('./config');
 const api = require('./api');
 const express = require('./services/express');
+const mongoose = require('mongoose');
 
 const app = express('/api/v1', api);
 const server = http.createServer(app);
+
+// mongoose
+mongoose.Promise = Promise;
+mongoose.connect(config.mongo.uri);
 
 // start the server
 setImmediate(function() {

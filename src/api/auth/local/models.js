@@ -55,13 +55,17 @@ userSchema.methods.authenticate = function authenticate(password, callback) {
     });
 };
 
-userSchema.methods.serializeJwt = function serialize(){
+userSchema.methods.serializeJson = function serialize(){
     return {
         id: this.id,
         email: this.email,
         username: this.username,
         role: this.role
     };
+};
+
+userSchema.methods.serializeJwt = function serialize(){
+    return this.serializeJson();
 };
 
 userSchema.statics = {

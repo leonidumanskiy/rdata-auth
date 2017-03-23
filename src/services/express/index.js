@@ -20,10 +20,6 @@ module.exports = function app(path, router){
     // morgan
     app.use(morgan('tiny'));
 
-    // mongoose
-    mongoose.Promise = Promise;
-    mongoose.connect(config.mongo.uri);
-
     // routes
     app.use(path, router);
 

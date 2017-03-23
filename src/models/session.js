@@ -10,7 +10,7 @@ const mongoose = require('mongoose')
  * If the session gets revoked, refresh token stops working
  */
 
-const providers = ['local' /*, 'auth_provider_name' */];
+const providers = ['test', 'local' /*, 'auth_provider_name' */];
 
 const sessionSchema = new Schema({
     provider: {
