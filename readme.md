@@ -8,7 +8,13 @@ Based on Express, Passport and JWT
 This software is currently in it's beta stage. The newest versions might (and most likely will) break the backwards compatibility.
 
 ## Usage
-The auth server is a simple authentication server that uses different providers (passport strategies) to authenticate a user and issue access and refresh tokens. 
+The auth server is a simple authentication server that uses different providers (passport strategies) to authenticate a user and issue access and refresh tokens. Both access and refresh tokens are [JWT tokens](https://jwt.io/) that contain encoded user information. That information includes provider name, user id, user name, email, and provider-specific data.
+
+Access token is a short-term token that can not be revoked.
+Refresh token is a long-term token that also contains information about the session. This token can be revoked from the database.
+
+Third-party server (for example, data collection server) can check the access token in it's own authentication routine.
+
 
 ## API
 
