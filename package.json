@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha src/**/*.test.js --reporter spec --recursive",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "author": "Leonid Umanskiy",
   "license": "MIT",

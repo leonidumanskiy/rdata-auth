@@ -11,10 +11,16 @@ const server = http.createServer(app);
 mongoose.Promise = Promise;
 mongoose.connect(config.mongo.uri);
 
-// start the server
-setImmediate(function() {
-    server.listen(config.port, config.ip, function(){
-        console.log('Express server listening on http://%s:%d, in %s mode', config.ip, config.port, config.env);
-    });
-});
-
+module.exports = {
+    app: app,
+    api: api,
+    server: server,
+    run: function() {
+        // start the server
+        setImmediate(function () {
+            server.listen(config.port, config.ip, function () {
+                console.log('Express server listening on http://%s:%d, in %s mode', config.ip, config.port, config.env);
+            });
+        });
+    }
+};
