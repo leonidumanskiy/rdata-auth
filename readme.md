@@ -8,6 +8,11 @@ Based on Express, Passport and JWT
 This software is currently in it's beta stage. The newest versions might (and most likely will) break the backwards compatibility.
 
 ## Usage
+```javascript
+const app = require('rdata-auth-server');
+app.run();
+```
+
 The auth server is a simple authentication server that uses different providers (passport strategies) to authenticate a user and issue access and refresh tokens. Both access and refresh tokens are [JWT tokens](https://jwt.io/) that contain encoded user information. That information includes provider name, user id, user name, email, and provider-specific data.
 
 Access token is a short-term token that can not be revoked.
@@ -83,4 +88,22 @@ Returns 200 OK with result:
 }
 ```
 otherwise, returns 401 Unauthorized 
+
+### **Providing custom authentication strategies**
+You can extend the functionality of the express app by adding your custom middleware to the default router called **api**:
+
+```javascript
+const app = require('rdata-auth-server');
+const express = require('express');
+
+const router = new express.Router();
+router.post('/authenticate', function(req, res, next) {
+    res.json({"result": true});
+});
+app.api.use('/customAuth', router);
+
+app.run();
+```
+
+This example will create /api/v1/customAuth/authenticate route. If you want to ignore the default api version and provide your own, use **app.app.use** (app.app exposes Express app object).
 
