@@ -2,12 +2,22 @@ const express = require('express');
 const config = require('../../config');
 const passportService = require('../../services/passport/index');
 const Session = require('../../models/session');
+const jwt = require('jsonwebtoken');
 
 const local = require('./local/index');
 
 const router = new express.Router();
 
 router.use('/local', local);
+
+
+router.post('/refresh', passportService.authenticateRefreshToken(), function(req, res, next){
+    // Issue another access token based on the refresh token
+    var accessToken = jwt.sign({ user: req.user }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
+
+    res.json({accessToken: accessToken});
+});
+
 
 router.post('/revoke', passportService.authenticateRefreshToken(), function(req, res, next){
     // Revoke session and refresh token.

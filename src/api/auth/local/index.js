@@ -16,8 +16,8 @@ router.post('/authenticate', passportService.authenticateLocalPassword(), functi
         if(err) return next(err);
 
         // Issue new refresh and access token
-        var accessToken = jwt.sign({ user: user.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
-        var refreshToken = jwt.sign({ user: user.serializeJwt(), session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
+        var accessToken = jwt.sign({ user: user.serializeJwt() }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
+        var refreshToken = jwt.sign({ user: user.serializeJwt(), session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
 
         res.json({refreshToken: refreshToken, accessToken: accessToken});
     });

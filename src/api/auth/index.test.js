@@ -29,6 +29,38 @@ afterEach(function(done){
 });
 
 
+describe('POST /refresh', function() {
+    it('respond with 401 Unauthorized (no post data)', function(done) {
+        request(app)
+            .post('/refresh')
+            .expect(401, done);
+    });
+
+    it('respond with 401 Unauthorized (invalid refresh token)', function(done) {
+        request(app)
+            .post('/revoke')
+            .send({refresh_token: 'invalidrefreshtoken'})
+            .expect(401, done);
+    });
+
+    it('respond with 200 OK (valid refresh token)', function(done) {
+        var refreshToken = jwt.sign({user: session.user, session: sessionModel.serializeJwt()}, config.jwtSecret);
+        request(app)
+            .post('/refresh')
+            .send({refresh_token: refreshToken})
+            .expect(200)
+            .end(function(err, res) {
+                if (err) done(err);
+                assert(!res.body.err, 'request returned error');
+                assert(res.body.accessToken, 'no access token returned');
+
+                var accessToken = jwt.verify(res.body.accessToken, config.jwtSecret);
+                assert(accessToken.user.id === session.user.id, "user id dont match");
+                done();
+            });
+    });
+});
+
 describe('POST /revoke', function() {
     it('respond with 401 Unauthorized (no post data)', function(done) {
         request(app)
