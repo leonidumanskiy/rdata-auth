@@ -84,7 +84,7 @@ describe('POST /revoke', function() {
             .end(function(err, res) {
                 if (err) done(err);
                 assert(!res.body.err, 'request returned error');
-                assert(res.body.result === 'ok', 'result is not ok');
+                assert(res.body.result, 'result is not true');
 
                 Session.findOne({_id: sessionModel.id}, function(err, sess){
                     if(err) done(err);

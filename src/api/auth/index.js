@@ -31,7 +31,7 @@ router.post('/revoke', passportService.authenticateRefreshToken(), function(req,
 
         Session.remove({_id: session.id}, function(err){
             if(err) return next(err);
-            res.json({result: "ok"});
+            res.json({result: true});
         });
     });
 });
