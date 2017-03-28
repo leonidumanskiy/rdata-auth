@@ -19,6 +19,8 @@ function clientErrorHandler (err, req, res, next){
 
 function errorHandler (err, req, res, next) {
     if (res.headersSent) return next(err);
+    if(!err) return next(err);
+
     console.error(err.stack);
 
     res.status(err.status || 500);
@@ -29,7 +31,14 @@ function errorHandler (err, req, res, next) {
     return res.json({ error: { message: err.message, name: err.name }});
 }
 
+// This handler goes last. If we are here this means 404
+function notFoundErrorHandler (req, res, next) {
+    res.status(404).json({ error: { message: "404 not found", name: "NotFound"} })
+}
+
+
 
 module.exports.validationErrorHandler = validationErrorHandler;
 module.exports.clientErrorHandler = clientErrorHandler;
 module.exports.errorHandler = errorHandler;
+module.exports.notFoundErrorHandler = notFoundErrorHandler;
