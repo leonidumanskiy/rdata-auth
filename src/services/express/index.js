@@ -26,6 +26,7 @@ module.exports = function app(path, router){
     // error handlers
     app.use(errorHandlers.clientErrorHandler);
     app.use(errorHandlers.validationErrorHandler);
+    app.use(errorHandlers.authenticationErrorHandler);
     app.use(errorHandlers.errorHandler);
     app.use(errorHandlers.notFoundErrorHandler);
 

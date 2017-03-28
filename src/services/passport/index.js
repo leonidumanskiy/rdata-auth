@@ -74,9 +74,9 @@ function PassportService() {
     passport.use('refreshToken', this.refreshTokenStrategy);
     passport.use('accessToken', this.accessTokenStrategy);
 
-    this.authenticateLocalPassword = function authenticatePassword() { return passport.authenticate('localPassword', { session: false }) };
-    this.authenticateRefreshToken = function authenticateRefreshToken() { return passport.authenticate('refreshToken', { session: false }) };
-    this.authenticateAccessToken = function authenticateAccessToken() { return passport.authenticate('accessToken', { session: false }) };
+    this.authenticateLocalPassword = function authenticatePassword() { return passport.authenticate('localPassword', { session: false, failWithError: true }) };
+    this.authenticateRefreshToken = function authenticateRefreshToken() { return passport.authenticate('refreshToken', { session: false, failWithError: true }) };
+    this.authenticateAccessToken = function authenticateAccessToken() { return passport.authenticate('accessToken', { session: false, failWithError: true }) };
 }
 
 module.exports = new PassportService();

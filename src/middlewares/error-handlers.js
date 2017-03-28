@@ -1,6 +1,7 @@
 const ClientError = require('../errors').ClientError;
 const ValidationError = require('mongoose').Error.ValidationError;
 
+// Mongoose validation error handler
 function validationErrorHandler (err, req, res, next) {
     if (res.headersSent) return next(err);
     if(err && err instanceof ValidationError)
@@ -9,6 +10,16 @@ function validationErrorHandler (err, req, res, next) {
     next(err);
 }
 
+// Passport authentication error handler
+function authenticationErrorHandler (err, req, res, next) {
+    if (res.headersSent) return next(err);
+    if(err && err.name === 'AuthenticationError') // Passport doens't expose authentication error
+        return res.status(401).json({ error: err });
+
+    next(err);
+}
+
+// Client error handler
 function clientErrorHandler (err, req, res, next){
     if (res.headersSent) return next(err);
     if (err && err instanceof ClientError)
@@ -17,6 +28,7 @@ function clientErrorHandler (err, req, res, next){
     next(err);
 }
 
+// Error of unknown type occured. Don't expose it on Production
 function errorHandler (err, req, res, next) {
     if (res.headersSent) return next(err);
     if(!err) return next(err);
@@ -42,3 +54,4 @@ module.exports.validationErrorHandler = validationErrorHandler;
 module.exports.clientErrorHandler = clientErrorHandler;
 module.exports.errorHandler = errorHandler;
 module.exports.notFoundErrorHandler = notFoundErrorHandler;
+module.exports.authenticationErrorHandler = authenticationErrorHandler;

@@ -32,7 +32,7 @@ describe('POST /authenticate', function() {
     it('respond with 400 Bad request (no post data)', function(done) {
         request(app)
             .post('/authenticate')
-            .expect(400, done);
+            .expect(401, done);
     });
 
     it('respond with 401 Unauthorized (invalid username)', function(done) {
