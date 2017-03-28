@@ -78,7 +78,7 @@ Revokes the refresh token
 
 | Parameter     | Description                     | Example                           |
 |---------------|---------------------------------|-----------------------------------|
-| refresh_token | Previously issued refresh token | REFRESHTOKEN1234 (usually longer) |
+| refreshToken  | Previously issued refresh token | REFRESHTOKEN1234 (usually longer) |
 
 **Result**:
 Returns 200 OK with result:

@@ -39,7 +39,7 @@ describe('POST /refresh', function() {
     it('respond with 401 Unauthorized (invalid refresh token)', function(done) {
         request(app)
             .post('/revoke')
-            .send({refresh_token: 'invalidrefreshtoken'})
+            .send({refreshToken: 'invalidrefreshtoken'})
             .expect(401, done);
     });
 
@@ -47,7 +47,7 @@ describe('POST /refresh', function() {
         var refreshToken = jwt.sign({user: session.user, session: sessionModel.serializeJwt()}, config.jwtSecret);
         request(app)
             .post('/refresh')
-            .send({refresh_token: refreshToken})
+            .send({refreshToken: refreshToken})
             .expect(200)
             .end(function(err, res) {
                 if (err) done(err);
@@ -71,7 +71,7 @@ describe('POST /revoke', function() {
     it('respond with 401 Unauthorized (invalid refresh token)', function(done) {
         request(app)
             .post('/revoke')
-            .send({refresh_token: 'invalidrefreshtoken'})
+            .send({refreshToken: 'invalidrefreshtoken'})
             .expect(401, done);
     });
 
@@ -79,7 +79,7 @@ describe('POST /revoke', function() {
         var refreshToken = jwt.sign({user: session.user, session: sessionModel.serializeJwt()}, config.jwtSecret);
         request(app)
             .post('/revoke')
-            .send({refresh_token: refreshToken})
+            .send({refreshToken: refreshToken})
             .expect(200)
             .end(function(err, res) {
                 if (err) done(err);

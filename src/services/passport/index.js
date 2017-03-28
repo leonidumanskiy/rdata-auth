@@ -31,8 +31,8 @@ function PassportService() {
     var refreshTokenJwtStrategyOptions = {
         secretOrKey: config.jwtSecret,
         jwtFromRequest: ExtractJwt.fromExtractors([
-            ExtractJwt.fromUrlQueryParameter('refresh_token'),
-            ExtractJwt.fromBodyField('refresh_token')
+            ExtractJwt.fromUrlQueryParameter('refreshToken'),
+            ExtractJwt.fromBodyField('refreshToken')
         ])
     };
 
@@ -58,8 +58,8 @@ function PassportService() {
     var accessTokenJwtStrategyOptions = {
         secretOrKey: config.jwtSecret,
         jwtFromRequest: ExtractJwt.fromExtractors([
-            ExtractJwt.fromUrlQueryParameter('access_token'),
-            ExtractJwt.fromBodyField('access_token'),
+            ExtractJwt.fromUrlQueryParameter('accessToken'),
+            ExtractJwt.fromBodyField('accessToken'),
             ExtractJwt.fromAuthHeaderWithScheme('Bearer')
         ])
     };
