@@ -17,12 +17,13 @@ router.post('/authenticate', passportService.authenticateLocalPassword(), functi
         if(err) return next(err);
 
         // Issue new refresh and access token
+        var userSerialized = user.serializeJwt();
         var accessTokenExpiresAt = Date.now() + ms(config.accessTokenExpiresIn);
         var refreshTokenExpiresAt = Date.now() + ms(config.refreshTokenExpiresIn);
-        var accessToken = jwt.sign({ user: user.serializeJwt() }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
-        var refreshToken = jwt.sign({ user: user.serializeJwt(), session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
+        var accessToken = jwt.sign({ user: userSerialized }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
+        var refreshToken = jwt.sign({ user: userSerialized, session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
 
-        res.json({refreshToken: refreshToken, accessToken: accessToken, accessTokenExpiresAt: accessTokenExpiresAt, refreshTokenExpiresAt: refreshTokenExpiresAt });
+        res.json({refreshToken: refreshToken, accessToken: accessToken, accessTokenExpiresAt: accessTokenExpiresAt, refreshTokenExpiresAt: refreshTokenExpiresAt, user: userSerialized });
     });
 });
 

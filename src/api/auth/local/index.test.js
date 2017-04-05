@@ -67,8 +67,9 @@ describe('POST /authenticate', function() {
             .expect(function(res) {
                 assert(res.body.accessToken, 'no access token returned');
                 assert(res.body.refreshToken, 'no refresh token returned');
-                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt provided');
-                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt provided');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
+                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt returned');
+                assert(res.body.user, 'no user returned');
             })
             .expect(200, done);
     });
@@ -81,8 +82,9 @@ describe('POST /authenticate', function() {
             .expect(function(res) {
                 assert(res.body.accessToken, 'no access token returned');
                 assert(res.body.refreshToken, 'no refresh token returned');
-                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt provided');
-                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt provided');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
+                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt returned');
+                assert(res.body.user, 'no user returned');
             })
             .expect(200, done);
     });
@@ -96,8 +98,9 @@ describe('POST /authenticate', function() {
             .end(function(err, res) {
                 if(err) done(err);
                 assert(res.body.accessToken, 'no access token returned');
-                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt provided');
-                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt provided');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
+                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt returned');
+                assert(res.body.user, 'no user returned');
                 var accessToken = jwt.verify(res.body.accessToken, config.jwtSecret);
                 assert(accessToken.user.id === userModel.id, "user id dont match");
                 done();
@@ -113,8 +116,9 @@ describe('POST /authenticate', function() {
             .end(function(err, res) {
                 if(err) done(err);
                 assert(res.body.refreshToken, 'no refresh token returned');
-                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt provided');
-                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt provided');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
+                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt returned');
+                assert(res.body.user, 'no user returned');
                 var refreshToken = jwt.verify(res.body.refreshToken, config.jwtSecret);
                 assert(refreshToken.user.id === userModel.id, "user id dont match");
                 var sessionId = refreshToken.session.id;
