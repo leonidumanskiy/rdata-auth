@@ -6,6 +6,7 @@ const Session = require('../../../models/session');
 const User = require('./models').User;
 const EmailTakenError = require('./errors').EmailTakenError;
 const UsernameTakenError = require('./errors').UsernameTakenError;
+const ms = require('ms');
 
 const router = new express.Router();
 
@@ -16,10 +17,12 @@ router.post('/authenticate', passportService.authenticateLocalPassword(), functi
         if(err) return next(err);
 
         // Issue new refresh and access token
+        var accessTokenExpiresAt = Date.now() + ms(config.accessTokenExpiresIn);
+        var refreshTokenExpiresAt = Date.now() + ms(config.refreshTokenExpiresIn);
         var accessToken = jwt.sign({ user: user.serializeJwt() }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
         var refreshToken = jwt.sign({ user: user.serializeJwt(), session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
 
-        res.json({refreshToken: refreshToken, accessToken: accessToken});
+        res.json({refreshToken: refreshToken, accessToken: accessToken, accessTokenExpiresAt: accessTokenExpiresAt, refreshTokenExpiresAt: refreshTokenExpiresAt });
     });
 });
 

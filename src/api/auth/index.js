@@ -3,6 +3,7 @@ const config = require('../../config');
 const passportService = require('../../services/passport/index');
 const Session = require('../../models/session');
 const jwt = require('jsonwebtoken');
+const ms = require('ms');
 
 const local = require('./local/index');
 
@@ -13,9 +14,10 @@ router.use('/local', local);
 
 router.post('/refresh', passportService.authenticateRefreshToken(), function(req, res, next){
     // Issue another access token based on the refresh token
+    var accessTokenExpiresAt = Date.now() + ms(config.accessTokenExpiresIn);
     var accessToken = jwt.sign({ user: req.user }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
 
-    res.json({accessToken: accessToken});
+    res.json({accessToken: accessToken, accessTokenExpiresAt: accessTokenExpiresAt});
 });
 
 

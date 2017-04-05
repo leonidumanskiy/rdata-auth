@@ -53,6 +53,7 @@ describe('POST /refresh', function() {
                 if (err) done(err);
                 assert(!res.body.err, 'request returned error');
                 assert(res.body.accessToken, 'no access token returned');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
 
                 var accessToken = jwt.verify(res.body.accessToken, config.jwtSecret);
                 assert(accessToken.user.id === session.user.id, "user id dont match");
