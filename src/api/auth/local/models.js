@@ -13,7 +13,8 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        index: true
     },
     password: {
         type: String,
@@ -26,7 +27,8 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        index: true
     },
     role: {
         type: String,
