@@ -28,9 +28,9 @@ router.post('/authenticate', passportService.authenticateLocalPassword(), functi
 });
 
 router.post('/register', function(req, res, next){
-    var email = String(req.body.email).trim();
+    var email = String(req.body.email).trim().toLowerCase();
     var password = String(req.body.password).trim();
-    var username = String(req.body.username).trim();
+    var username = String(req.body.username).trim().toLowerCase();
 
     User.findOne({ $or: [{ email: email }, {username: username}] }, function(err, user){
         if(err) return next(err);
