@@ -89,6 +89,36 @@ describe('POST /authenticate', function() {
             .expect(200, done);
     });
 
+    it('respond with 200 OK (valid with case insensitive username)', function(done) {
+        request(app)
+            .post('/authenticate')
+            .send({username: user.username.toUpperCase(),
+                password: user.password})
+            .expect(function(res) {
+                assert(res.body.accessToken, 'no access token returned');
+                assert(res.body.refreshToken, 'no refresh token returned');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
+                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt returned');
+                assert(res.body.user, 'no user returned');
+            })
+            .expect(200, done);
+    });
+
+    it('respond with 200 OK (valid auth with case insensitive email)', function(done) {
+        request(app)
+            .post('/authenticate')
+            .send({username: user.email.toUpperCase(),
+                password: user.password})
+            .expect(function(res) {
+                assert(res.body.accessToken, 'no access token returned');
+                assert(res.body.refreshToken, 'no refresh token returned');
+                assert(res.body.accessTokenExpiresAt, 'no accessTokenExpiresAt returned');
+                assert(res.body.refreshTokenExpiresAt, 'no refreshTokenExpiresAt returned');
+                assert(res.body.user, 'no user returned');
+            })
+            .expect(200, done);
+    });
+
     it('respond with 200 OK (valid auth token)', function(done) {
         request(app)
             .post('/authenticate')

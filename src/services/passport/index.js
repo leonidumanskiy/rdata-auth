@@ -16,7 +16,7 @@ function PassportService() {
 
     this.localPasswordStrategy = new LocalStrategy(
         function(username, password, cb) {
-            User.findOne({ $or: [{email: username}, { username: username }]}, function(err, user) {
+            User.findOne({ $or: [{email: username.trim().toLowerCase()}, { username: username.trim().toLowerCase() }]}, function(err, user) {
                 if (err) return cb(err);
                 if (!user) return cb(null, false);
                 user.authenticate(password, function onAuthenticate(error, isValid){
