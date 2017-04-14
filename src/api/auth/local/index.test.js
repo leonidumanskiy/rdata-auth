@@ -248,10 +248,34 @@ describe('POST /register', function() {
             .expect(400, done);
     });
 
+    it('respond with 400 Bad request (username taken, case insensitive)', function(done) {
+        request(app)
+            .post('/register')
+            .send({ email: 'c@c.com',
+                username: user.username.toUpperCase(),
+                password: '123456'})
+            .expect(function(res) {
+                assert(res.body.error.name, 'ValidationError');
+            })
+            .expect(400, done);
+    });
+
     it('respond with 400 Bad request (email taken)', function(done) {
         request(app)
             .post('/register')
             .send({ email: user.email,
+                username: 'user3',
+                password: '123456'})
+            .expect(function(res) {
+                assert(res.body.error.name, 'ValidationError');
+            })
+            .expect(400, done);
+    });
+
+    it('respond with 400 Bad request (email taken, case insensitive)', function(done) {
+        request(app)
+            .post('/register')
+            .send({ email: user.email.toUpperCase(),
                 username: 'user3',
                 password: '123456'})
             .expect(function(res) {
