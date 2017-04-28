@@ -1,8 +1,9 @@
 {
-  "name": "rdata-auth",
-  "version": "1.0.3",
+  "name": "rdata-auth-server",
+  "version": "1.0.4",
   "description": "RData Authentication Server",
   "main": "index.js",
+  "readme": "readme.md",
   "repository": {
     "type": "git",
     "url": "git://github.com/rdata-systems/rdata-auth-server.git"
