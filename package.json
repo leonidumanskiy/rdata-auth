@@ -1,6 +1,6 @@
 {
   "name": "rdata-auth-server",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "RData Authentication Server",
   "main": "index.js",
   "readme": "readme.md",
