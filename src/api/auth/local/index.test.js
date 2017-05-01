@@ -8,6 +8,7 @@ const Session = require('../../../models/session');
 const express = require('../../../services/express');
 const assert = require('assert');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 var app;
 
@@ -177,9 +178,40 @@ describe('POST /register', function() {
             .end(function(err, res) {
                 if (err) return done(err);
 
-                User.findOne({_id: res.body.user.id}, function(err, user) {
+                User.findOne({_id: res.body.user.id}, function(err, userModel) {
                     if (err) return done(err);
+                    var user = userModel.toObject();
                     assert(user, 'no user found in the db after registration');
+                    assert.equal(user.email, 'c@c.com', 'user email is invalid');
+                    assert.equal(user.username, 'user3', 'username is invalid');
+                    assert(bcrypt.compareSync('123456', userModel.password), 'user password is invalid');
+                    assert.equal(user.roles.length, 1, 'user role is invalid');
+                    assert.equal(user.roles[0].role, 'writeData', 'user role is invalid');
+                    done();
+                });
+            });
+    });
+
+    it('respond with 200 OK (registers the user with hashed password)', function(done) {
+        request(app)
+            .post('/register')
+            .send({ email: 'c@c.com',
+                username: 'user3',
+                password: bcrypt.hashSync("654321", bcrypt.genSaltSync(1)),
+                passwordIsHashed: true})
+            .expect(200)
+            .end(function(err, res) {
+                if (err) return done(err);
+
+                User.findOne({_id: res.body.user.id}, function(err, userModel) {
+                    if (err) return done(err);
+                    var user = userModel.toObject();
+                    assert(user, 'no user found in the db after registration');
+                    assert.equal(user.email, 'c@c.com', 'user email is invalid');
+                    assert.equal(user.username, 'user3', 'username is invalid');
+                    assert(bcrypt.compareSync('654321', userModel.password), 'user password is invalid');
+                    assert.equal(user.roles.length, 1, 'user role is invalid');
+                    assert.equal(user.roles[0].role, 'writeData', 'user role is invalid');
                     done();
                 });
             });

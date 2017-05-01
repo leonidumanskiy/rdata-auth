@@ -25,6 +25,13 @@ const sessionSchema = new Schema({
     timestamps: true
 });
 
+if (!sessionSchema.options.toObject) sessionSchema.options.toObject = {};
+sessionSchema.options.toObject.transform = function transform(doc, ret, options) {
+    return {
+        id: ret._id,
+        provider: ret.provider
+    }
+};
 
 sessionSchema.methods.checkExpired = function expired(callback){
     if(Date.now() < this.createdAt.getTime() + ms(config.refreshTokenExpiresIn)){
@@ -37,11 +44,10 @@ sessionSchema.methods.checkExpired = function expired(callback){
     }
 };
 
-sessionSchema.methods.serializeJwt = function serialize(){
-    return {
-        id: this.id,
-        provider: this.provider
-    };
+
+
+sessionSchema.methods.toJwtObject = function serialize(){
+    return this.toObject();
 };
 
 const Session = mongoose.model('Session', sessionSchema, 'sessions');

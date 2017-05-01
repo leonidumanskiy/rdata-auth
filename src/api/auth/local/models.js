@@ -4,7 +4,26 @@ const mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
-const roles = ['user', 'instructor'];
+const userRoleSchema = new Schema({
+    role: {
+        type: String
+    },
+    game: {
+        type: String
+    },
+    group: {
+        type: String
+    }
+});
+
+if (!userRoleSchema.options.toObject) userRoleSchema.options.toObject = {};
+userRoleSchema.options.toObject.transform = function transform(doc, ret, options) {
+    return {
+        role: ret.role,
+        game: ret.game,
+        group: ret.group
+    }
+};
 
 const userSchema = new Schema({
     email: {
@@ -30,17 +49,37 @@ const userSchema = new Schema({
         lowercase: true,
         index: true
     },
-    role: {
-        type: String,
-        enum: roles,
-        default: 'user'
-    }
+    roles: [userRoleSchema]
 }, {
     timestamps: true
 });
 
+if (!userSchema.options.toObject) userSchema.options.toObject = {};
+userSchema.options.toObject.transform = function transform(doc, ret, options) {
+    return {
+        id: ret._id,
+        email: ret.email,
+        username: ret.username,
+        roles: ret.roles
+    }
+};
+
+userSchema.methods.toJwtObject = function serialize(){
+    return this.toObject();
+};
+
+/**
+ * This temporary flag is used in the registration, to allow hashing the password on the client
+ * before registering new account (or transferring user from other systems that also use bcrypt)
+ */
+userSchema.virtual('passwordIsHashed').get(function () {
+    return this.__passwordIsHashed;
+}).set(function (value) {
+    this.__passwordIsHashed = value;
+});
+
 userSchema.pre('save', function (next) {
-    if (!this.isModified('password')) return next();
+    if (!this.isModified('password') || this.__passwordIsHashed) return next();
     var model = this;
     var rounds = 10;
     bcrypt.hash(model.password, rounds, function onHashed(error, hash){
@@ -57,22 +96,6 @@ userSchema.methods.authenticate = function authenticate(password, callback) {
     });
 };
 
-userSchema.methods.serializeJson = function serialize(){
-    return {
-        id: this.id,
-        email: this.email,
-        username: this.username,
-        role: this.role
-    };
-};
-
-userSchema.methods.serializeJwt = function serialize(){
-    return this.serializeJson();
-};
-
-userSchema.statics = {
-    roles: roles
-};
 
 const User = mongoose.model('User', userSchema, 'users');
 module.exports.User = User;

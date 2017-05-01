@@ -44,7 +44,7 @@ describe('POST /refresh', function() {
     });
 
     it('respond with 200 OK (valid refresh token)', function(done) {
-        var refreshToken = jwt.sign({user: session.user, session: sessionModel.serializeJwt()}, config.jwtSecret);
+        var refreshToken = jwt.sign({user: session.user, session: sessionModel.toJwtObject()}, config.jwtSecret);
         request(app)
             .post('/refresh')
             .send({refreshToken: refreshToken})
@@ -78,7 +78,7 @@ describe('POST /revoke', function() {
     });
 
     it('respond with 200 OK (valid refresh token)', function(done) {
-        var refreshToken = jwt.sign({user: session.user, session: sessionModel.serializeJwt()}, config.jwtSecret);
+        var refreshToken = jwt.sign({user: session.user, session: sessionModel.toJwtObject()}, config.jwtSecret);
         request(app)
             .post('/revoke')
             .send({refreshToken: refreshToken})

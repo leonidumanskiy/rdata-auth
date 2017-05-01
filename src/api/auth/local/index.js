@@ -13,15 +13,15 @@ const router = new express.Router();
 router.post('/authenticate', passportService.authenticateLocalPassword(), function(req, res, next){
     // Create new session and issue refresh and access tokens
     var user = req.user;
-    Session.create({ provider: 'local', user: user.serializeJwt() }, function (err, session) {
+    Session.create({ provider: 'local', user: user.toJwtObject() }, function (err, session) {
         if(err) return next(err);
 
         // Issue new refresh and access token
-        var userSerialized = user.serializeJwt();
+        var userSerialized = user.toJwtObject();
         var accessTokenExpiresAt = Date.now() + ms(config.accessTokenExpiresIn);
         var refreshTokenExpiresAt = Date.now() + ms(config.refreshTokenExpiresIn);
         var accessToken = jwt.sign({ user: userSerialized }, config.jwtSecret, { expiresIn: config.accessTokenExpiresIn });
-        var refreshToken = jwt.sign({ user: userSerialized, session: session.serializeJwt() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
+        var refreshToken = jwt.sign({ user: userSerialized, session: session.toJwtObject() }, config.jwtSecret, { expiresIn: config.refreshTokenExpiresIn });
 
         res.json({refreshToken: refreshToken, accessToken: accessToken, accessTokenExpiresAt: accessTokenExpiresAt, refreshTokenExpiresAt: refreshTokenExpiresAt, user: userSerialized });
     });
@@ -31,15 +31,16 @@ router.post('/register', function(req, res, next){
     var email = String(req.body.email).trim().toLowerCase();
     var password = String(req.body.password).trim();
     var username = String(req.body.username).trim().toLowerCase();
+    var passwordIsHashed = Boolean(req.body.passwordIsHashed);
 
     User.findOne({ $or: [{ email: email }, {username: username}] }, function(err, user){
         if(err) return next(err);
         if(user && user.email === email) return next(new EmailTakenError('This email is already taken'));
         if(user && user.username === username) return next(new UsernameTakenError('This username is already taken'));
 
-        User.create({ email: email, username: username, password: password }, function (err, user) {
+        User.create({ email: email, username: username, password: password, roles: [{role:"writeData"}], passwordIsHashed: passwordIsHashed }, function (err, user) {
             if(err) return next(err);
-            res.json({user: user.serializeJson()});
+            res.json({user: user.toObject()});
         });
     });
 });
