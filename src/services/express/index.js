@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors')
 const compression = require('compression');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -9,6 +10,9 @@ const errorHandlers = require('../../middlewares/error-handlers');
 module.exports = function app(path, router){
 
     const app = express();
+
+    // Cross-origin resource sharing
+    app.use(cors());
 
     // body-parser
     app.use(bodyParser.json()); // support json encoded bodies
