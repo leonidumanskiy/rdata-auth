@@ -28,8 +28,9 @@
     "morgan": "^1.8.1",
     "ms": "^1.0.0",
     "passport": "^0.3.2",
+    "passport-anonymous": "^1.0.1",
     "passport-jwt": "^2.2.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
   },
   "devDependencies": {
     "mocha": "^3.2.0",

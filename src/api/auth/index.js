@@ -6,11 +6,12 @@ const jwt = require('jsonwebtoken');
 const ms = require('ms');
 
 const local = require('./local/index');
+const device = require('./device/index');
 
 const router = new express.Router();
 
 router.use('/local', local);
-
+router.use('/device', device);
 
 router.post('/refresh', passportService.authenticateRefreshToken(), function(req, res, next){
     // Issue another access token based on the refresh token
